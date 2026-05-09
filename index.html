@@ -1,0 +1,1809 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo DTF Premium | Remeras Personalizadas</title>
+    <!-- Incluimos iconos para el dropdown y whatsapp -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Variables de color y tipografía */
+        :root {
+            --bg-color: #0f0f11;
+            --card-bg: #1a1a1d;
+            --text-light: #f5f5f5;
+            --text-muted: #a0a0a0;
+            --accent-color: #e50914; 
+            --hover-accent: #ff1a26;
+            --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* Reseteo básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-light);
+            line-height: 1.6;
+            scroll-behavior: smooth; /* Para desplazamiento suave */
+        }
+
+        /* --- Encabezado y Navegación --- */
+        header {
+            background-color: rgba(15, 15, 17, 0.98);
+            padding: 1rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        /* Ajuste para logo con imagen */
+        .logo { 
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem; 
+            font-weight: 800; 
+            text-transform: uppercase;
+        }
+        
+        .logo img {
+            max-height: 75px; 
+            width: auto;
+        }
+        
+        /* Texto del logo de repuesto (si no hay imagen) */
+        .logo-text span { color: var(--accent-color); }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--accent-color);
+        }
+
+        /* --- Menú Desplegable (Dropdown) --- */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #1a1a1d;
+            min-width: 220px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.8);
+            z-index: 1;
+            border-radius: 8px;
+            border: 1px solid #333;
+            top: 100%; /* Justo debajo del botón */
+            left: 0;
+            overflow: hidden;
+        }
+
+        .dropdown-content a {
+            color: var(--text-light);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            border-bottom: 1px solid #2a2a2d;
+            font-weight: 500;
+        }
+
+        .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #2a2a2d;
+            color: var(--accent-color);
+            padding-left: 20px; /* Efecto de movimiento al hover */
+            transition: padding 0.3s ease;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Sección Hero --- */
+        .hero {
+            text-align: center;
+            padding: 5rem 5%;
+            background: linear-gradient(180deg, #1a1a1d 0%, #0f0f11 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+        }
+
+        /* Título de Sección Dinámico */
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid var(--accent-color);
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-header-container {
+            text-align: center;
+            width: 100%;
+            margin-top: 2rem;
+        }
+
+        /* --- Catálogo Grid --- */
+        .catalog-container {
+            padding: 0 5% 5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 60vh; /* Asegura un mínimo de altura si no hay productos */
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+        }
+
+        /* --- Tarjetas de Producto --- */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #2a2a2d;
+            display: flex;
+            flex-direction: column;
+            min-height: 480px; /* Tarjetas un poco más altas */
+            animation: cardAppear 0.5s ease-out forwards;
+        }
+
+        @keyframes cardAppear {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+            border-color: #555;
+        }
+
+        .card-img-placeholder {
+            width: 100%;
+            aspect-ratio: 3/4; /* Más vertical para remeras */
+            background-color: #222;
+            background-image: linear-gradient(45deg, #1a1a1d 25%, #222 25%, #222 50%, #1a1a1d 50%, #1a1a1d 75%, #222 75%, #222 100%);
+            background-size: 20px 20px; /* Patrón sutil */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .card-img-placeholder::after {
+            background: rgba(0,0,0,0.7);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #ddd;
+        }
+
+        /* Si usas imágenes reales, esto asegura que cubran el espacio */
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            aspect-ratio: 3/4;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .category-tag {
+            font-size: 0.75rem;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #333;
+            padding-top: 1rem;
+        }
+
+        .price {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        .btn-consultar {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-consultar:hover {
+            background-color: var(--hover-accent);
+        }
+
+        /* --- Paginación --- */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 4rem;
+        }
+
+        .page-btn {
+            background-color: var(--card-bg);
+            color: var(--text-light);
+            border: 1px solid #333;
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .page-btn:hover { border-color: var(--text-light); }
+        
+        .page-btn.active {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+
+        /* Mensaje cuando una categoría está vacía */
+        .empty-message {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px dashed #444;
+            display: none; /* Oculto por defecto */
+        }
+
+        /* --- Botón Flotante WhatsApp --- */
+        .whatsapp-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 30px;
+            right: 30px;
+            background-color: #25d366;
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+
+        .whatsapp-float:hover { transform: scale(1.1); }
+
+        footer {
+            text-align: center;
+            padding: 2rem 5%;
+            background-color: #151518;
+            border-top: 1px solid #333;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* --- Responsive --- */
+        .menu-toggle { display: none; font-size: 1.5rem; cursor: pointer; }
+
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            
+            nav ul {
+                display: none; /* Oculto inicialmente en móvil */
+                flex-direction: column;
+                width: 100%;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                background-color: #1a1a1d;
+                padding: 1rem 0;
+                border-bottom: 1px solid #333;
+            }
+
+            nav ul.show { display: flex; } /* Clase para mostrar menú móvil */
+
+            nav ul li { width: 100%; text-align: center; padding: 10px 0; }
+            
+            .dropdown-content {
+                position: static;
+                display: none;
+                background-color: #222;
+                box-shadow: none;
+                border: none;
+                width: 100%;
+                border-radius: 0;
+            }
+
+            .dropdown.active .dropdown-content { display: block; }
+
+            .hero h1 { font-size: 2.2rem; }
+            .whatsapp-float { width: 50px; height: 50px; bottom: 20px; right: 20px; font-size: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <!-- Logo: Reemplaza src con tu imagen -->
+        <a href="#" class="logo" style="text-decoration: none;" onclick="filterCategory('populares')">
+            <!-- <img src="tu-logo.png" alt="DTF Studio"> -->
+            <div class="logo-text"><img src="logonuevo-jv-negro.png" alt="Logo DTF Studio"></div>
+        </a>
+        
+        <div class="menu-toggle" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <nav>
+            <ul id="nav-menu">
+                <li><a onclick="filterCategory('populares')" class="nav-link active">Inicio</a></li>
+                
+                <!-- Menú Desplegable de Categorías -->
+                <li class="dropdown" onclick="toggleDropdown(this)">
+                    <a class="nav-link">Catálogo <i class="fas fa-chevron-down" style="font-size: 0.8em; margin-left:5px;"></i></a>
+                    <div class="dropdown-content">
+                        <a onclick="filterCategory('todos')">Ver Todo</a>
+                        <a onclick="filterCategory('anime')">Anime</a>
+                        <a onclick="filterCategory('comics')">Cómics</a>
+                        <a onclick="filterCategory('musica')">Música</a>
+                        <a onclick="filterCategory('argentina')">Selección Argentina</a>
+                        <a onclick="filterCategory('deportes')">Deportes</a>
+                        <a onclick="filterCategory('videojuegos')">Videojuegos</a>
+                        <a onclick="filterCategory('series')">Series</a>
+                        <a onclick="filterCategory('peliculas')">Películas</a>
+                        <a onclick="filterCategory('otros')">Otros</a>
+                    </div>
+                </li>
+                
+                <li><a href="#footer">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Texturas Reales. Calidad 8K.</h1>
+        <p>Prendas de algodón premium con estampados DTF. Diseños vibrantes que no se cuartean ni pierden color.</p>
+    </section>
+
+    <div class="section-header-container" id="catalogo">
+        <h2 class="section-title" id="current-category-title">Más Populares</h2>
+    </div>
+
+    <main class="catalog-container">
+        
+        <div class="grid" id="product-grid">
+            
+            <!-- PRODUCTOS: Nota el atributo data-category="nombre_categoria" y data-popular="true/false" -->
+
+            <article class="card" data-category="comics" data-popular="true">
+                <div class="card-img-placeholder"><img src="img/M-deadpool1.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Cómics</span>
+                    <h3 class="card-title">Deadpool</h3>
+                    <p class="card-desc">Deadpool</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="argentina" data-popular="true">
+                <div class="card-img-placeholder"><img src="img/M-dm-semi.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Selección Argentina</span>
+                    <h3 class="card-title">Diego Maradona</h3>
+                    <p class="card-desc">Mundial 86 - Diego Maradona.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="series" data-popular="true">
+                <div class="card-img-placeholder"><img src="img/M-butcher1-semi.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Series</span>
+                    <h3 class="card-title">Billy Butcher</h3>
+                    <p class="card-desc">Portada de la serie The Boys con Butcher.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="peliculas" data-popular="true">
+                <div class="card-img-placeholder"><img src="img/M-venom3-semi.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Peliculas</span>
+                    <h3 class="card-title">Venom</h3>
+                    <p class="card-desc">Eddie Brock - Venom</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="argentina" data-popular="true">
+                <div class="card-img-placeholder"><img src="img/M-Messi campeón del mundo 🇦🇷 (1).png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Selección Argentina</span>
+                    <h3 class="card-title">Lionel Messi</h3>
+                    <p class="card-desc">Qatar 2022 - Messi</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="comics" data-popular="true">
+                <div class="card-img-placeholder"><img src="img/M-wolverine.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Cómics</span>
+                    <h3 class="card-title">Wolverine</h3>
+                    <p class="card-desc">Wolverine de la serie animada.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="anime" data-popular="true">
+                <div class="card-img-placeholder"><img src="img/M-saga.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span>
+                    <h3 class="card-title">Saga</h3>
+                    <p class="card-desc">Saga de Geminis.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="peliculas" data-popular="true">
+                <div class="card-img-placeholder"><img src="img/M-joker3.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Películas</span>
+                    <h3 class="card-title">Joker</h3>
+                    <p class="card-desc">Joker de la pelicula de 2019.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="anime" data-popular="true">
+                <div class="card-img-placeholder"><img src="img/M-gokumui.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span>
+                    <h3 class="card-title">Goku</h3>
+                    <p class="card-desc">Dragon Ball Super - Goku Ultra Instinto.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <!-- PRODUCTOS NO POPULARES (Solo aparecen cuando se filtra la categoría) -->
+            
+            <article class="card" data-category="deportes" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/ali-mock.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Deportes</span>
+                    <h3 class="card-title">Mohammed Ali</h3>
+                    <p class="card-desc">Mohammed Ali</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="series" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/bb1-mockup.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Series</span>
+                    <h3 class="card-title">Breaking Bad</h3>
+                    <p class="card-desc">Retrato en blanco y negro de Walter White.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="argentina" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/diego1.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Selección Argentina</span>
+                    <h3 class="card-title">Diego Maradona</h3>
+                    <p class="card-desc">Retrato de Maradona en el mundial 86.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <!-- PRODUCTOS EXTRA PARA PROBAR LA PAGINACIÓN EN "ANIME" -->
+            <article class="card" data-category="argentina" data-popular="false"> 
+                <div class="card-img-placeholder"><img src="img/diegomu.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Selección Argentina</span><h3 class="card-title">Diego Maradona</h3><p class="card-desc">Retrato de Maradona en el mundial 86.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+            <article class="card" data-category="videojuegos" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/gof-mockup.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Games</span><h3 class="card-title">God of War</h3><p class="card-desc">Kratos</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+            <article class="card" data-category="videojuegos" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/gof-mockup-frente.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Games</span><h3 class="card-title">God of War</h3><p class="card-desc">Logo God of War</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M1-shaka-semi.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Shaka</h3><p class="card-desc">Shaka de Virgo.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+            <article class="card" data-category="otros" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-aguila.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Otros</span><h3 class="card-title">Aguila</h3><p class="card-desc">Diseño de Aguila.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+            <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-aioria-semi1.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Aioria</h3><p class="card-desc">Aioria de Leo.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+            <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-albafica.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Albafica</h3><p class="card-desc">Albafica de Piscis.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="deportes" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-ali-semi.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Deportes</span><h3 class="card-title">Mohammed Ali</h3><p class="card-desc">Mohammed Ali leyenda.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="peliculas" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-alpacino-semi.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Peliculas</span><h3 class="card-title">Al Pacino</h3><p class="card-desc">Retrato de la pelicula Scarface.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-Bardock 2.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Bardock</h3><p class="card-desc">Retrato de Bardock</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="comics" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-batman.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Cómics</span><h3 class="card-title">Batman</h3><p class="card-desc">Batman animado.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="comics" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-batman1.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Cómics</span><h3 class="card-title">Batman</h3><p class="card-desc">Multi - Batman.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="videojuegos" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-battletoads.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Games</span><h3 class="card-title">Battletoads</h3><p class="card-desc">Battletoads.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="musica" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-bonjovi.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Música</span><h3 class="card-title">Bon Jovi</h3><p class="card-desc">Bon Jovi.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-broly.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Broly</h3><p class="card-desc">Broly de Dragon Ball Z.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="peliculas" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-bttf.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Peliculas</span><h3 class="card-title">Volver al Futuro</h3><p class="card-desc">Auto de Volver al Futuro.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="musica" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-cabodeguitarra.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Música</span><h3 class="card-title">Guitarra</h3><p class="card-desc">Cabo de Guitarra.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="otros" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-cadenas (1).png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Otros</span><h3 class="card-title">Cadenas</h3><p class="card-desc">Cadenas colgntes del cuello.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-camus.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Camus</h3><p class="card-desc">Camus de Acuario.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-cooler-semi.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Cooler</h3><p class="card-desc">Diseño de Cooler.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="series" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-coraje.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Series</span><h3 class="card-title">Coraje</h3><p class="card-desc">Coraje el perro cobarde.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="deportes" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-cr7.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Deportes</span><h3 class="card-title">CR7</h3><p class="card-desc">Diseño de Cristiano Ronaldo.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="deportes" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-cr71.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Deportes</span><h3 class="card-title">CR7</h3><p class="card-desc">CR7 - Portugal.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="videojuegos" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-cupa.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Games</span><h3 class="card-title">Bowser</h3><p class="card-desc">Diseño de Bowser.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="argentina" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-dm_semi.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Selección Argentina</span><h3 class="card-title">Diego Maradona</h3><p class="card-desc">Diseño de Diego Maradona en el mundial 86.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="deportes" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-dm1.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Deportes</span><h3 class="card-title">Diego Maradona</h3><p class="card-desc">Retrato de Diego Maradona.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="argentina" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/messi4.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Selección Argentina</span><h3 class="card-title">Lionel Messi</h3><p class="card-desc">Messi levantando la copa.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="argentina" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/messi-mockupespalda1.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Selección Argentina</span><h3 class="card-title">Lionel Messi</h3><p class="card-desc">Ilustración de Messi.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="argentina" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/messi-mockupfrente.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Selección Argentina</span><h3 class="card-title">Lionel Messi</h3><p class="card-desc">Logo de Messi.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="deportes" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-ferrari.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Deportes</span><h3 class="card-title">Ferrari</h3><p class="card-desc">Ferrari.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-g4.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Gohan</h3><p class="card-desc">Gohan del futuro.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="peliculas" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-godfather.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Peliculas</span><h3 class="card-title">The Godfather</h3><p class="card-desc">Retrato de El Padrino.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-gohans-semi.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Gohan</h3><p class="card-desc">Figuras de Gohan.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-gokumui-semi.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Goku</h3><p class="card-desc">Goku Ultra Instinto.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-gokussj3.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Goku</h3><p class="card-desc">Goku SSJ3.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="argentina" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-ha.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Selección Argentina</span><h3 class="card-title">Argentina</h3><p class="card-desc">Huella con la bandera Argentina.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="comics" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-hb.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Cómics</span><h3 class="card-title">Hellboy</h3><p class="card-desc">Retrato de Hellboy.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="deportes" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-hr.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Deportes</span><h3 class="card-title">River Plate</h3><p class="card-desc">Huella de River Plate.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="deportes" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-hbos.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Deportes</span><h3 class="card-title">Boca Juniors</h3><p class="card-desc">Huella de Boca Juniors.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="series" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-homelander.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Series</span><h3 class="card-title">Homelander</h3><p class="card-desc">Diseño de Homelander de la serie The Boys.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="series" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-homelander2.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Series</span><h3 class="card-title">Homelander</h3><p class="card-desc">Nuevo diseño de Homelander.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="series" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-homero.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Series</span><h3 class="card-title">Homero Simpson</h3><p class="card-desc">Los Simpsons.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-ikki_semi.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Ikki</h3><p class="card-desc">Ikki de Phoenix.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-ippo_negro.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Ippo Makunouchi</h3><p class="card-desc">Diseño de Ippo Makunouchi.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="musica" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-ironmaiden.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Música</span><h3 class="card-title">Iron Maiden</h3><p class="card-desc">Diseño de la banda Iron Maiden.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="musica" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-ironmaiden2.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Música</span><h3 class="card-title">Iron Maiden</h3><p class="card-desc">Diseño de la banda Iron Maiden.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="musica" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-ironmaiden3.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Música</span><h3 class="card-title">Iron Maiden</h3><p class="card-desc">Diseño de la banda Iron Maiden.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="musica" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-Jimi Hendrix.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Música</span><h3 class="card-title">Jimi Hendrix</h3><p class="card-desc">Retrato de Jimi Hendrix.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="peliculas" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-joker.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Peliculas</span><h3 class="card-title">Joker</h3><p class="card-desc">Diseño del Joker de la pelicula de 2008.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="peliculas" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/jbe-mu.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Peliculas</span><h3 class="card-title">Joker</h3><p class="card-desc">Joker de 2008.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="peliculas" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-joker1.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Peliculas</span><h3 class="card-title">Joker</h3><p class="card-desc">Joker de 2008.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="peliculas" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-joker5.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Peliculas</span><h3 class="card-title">Joker</h3><p class="card-desc">Joker de 2008.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="deportes" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-jordan23-semi.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Deportes</span><h3 class="card-title">Michael Jordan</h3><p class="card-desc">Figuras de Michael Jordan.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="deportes" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-jordan-semi.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Deportes</span><h3 class="card-title">Michael Jordan</h3><p class="card-desc">Diseño de Michael Jordan.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-KID BUU.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Kid Buu</h3><p class="card-desc">Diseño de Kid Buu.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="musica" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-metallica2.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Música</span><h3 class="card-title">Metallica</h3><p class="card-desc">Diseño de la banda de Rock Metallica.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="musica" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-kiss2.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Música</span><h3 class="card-title">Kiss</h3><p class="card-desc">Diseño de la banda de rock Kiss.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="videojuegos" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-lion.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Games</span><h3 class="card-title">Lion Kennedy</h3><p class="card-desc">Retrato de Lion Keneddy de la saga Resident Evil.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-luffy.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Luffy</h3><p class="card-desc">Diseño de la serie One Piece de Luffy.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-luffy1.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Luffy</h3><p class="card-desc">Diseño de la serie One Piece de Luffy.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="deportes" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-m.ali.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Deportes</span><h3 class="card-title">Mohammed Ali</h3><p class="card-desc">Diseño del boxeador Mohammed Ali.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-mha.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Izuku Midoriya</h3><p class="card-desc">Diseño de la serie de anime My hero Academy de Izuku Midoriya.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="deportes" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-Michael Jordan.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Deportes</span><h3 class="card-title">Michael Jordan</h3><p class="card-desc">Diseño del basquetbolista Michael Jordan.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="deportes" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-miketyson-semi.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Deportes</span><h3 class="card-title">Mike Tyson</h3><p class="card-desc">Diseño del boxeador Mike Tyson.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="musica" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-mj.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Música</span><h3 class="card-title">Michael Jackson</h3><p class="card-desc">Diseño del cantante Mickal Jackson.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="musica" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-mj (1).png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Música</span><h3 class="card-title">Michael Jackson</h3><p class="card-desc">Diseño del cantante Mickal Jackson.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="series" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-moe_s.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Series</span><h3 class="card-title">Los Simpsons</h3><p class="card-desc">Diseño de la taberna de Moe´s.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="otros" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-motorcicle.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Otros</span><h3 class="card-title">Harley Davison</h3><p class="card-desc">Diseño de motocicleta Harley Davison.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="deportes" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-mt-semi.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Deportes</span><h3 class="card-title">Mike Tyson</h3><p class="card-desc">Diseño del boxeador Micke Tyson.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-naruto-seminuevo.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Naruto</h3><p class="card-desc">Diseño de Naruto.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="musica" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-oasis.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Música</span><h3 class="card-title">Oasis</h3><p class="card-desc">Diseño de la banda Oasis.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-onepiece1.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Luffy</h3><p class="card-desc">Diseño de Luffy de la serie de anime One Piece.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="musica" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-pinkfloid.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Música</span><h3 class="card-title">Pink Floyd</h3><p class="card-desc">Diseño de la banda Pink Floyd.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="peliculas" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-predator.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Peliculas</span><h3 class="card-title">Depredador</h3><p class="card-desc">Dibujo de Depredador.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="peliculas" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-predator2.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Peliculas</span><h3 class="card-title">Depredador</h3><p class="card-desc">Diseño de la pelicula Depredador.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="videojuegos" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-re4.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Games</span><h3 class="card-title">Resident Evil</h3><p class="card-desc">Diseño del juego Resident Evil 4 Remake.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="videojuegos" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-rer.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Games</span><h3 class="card-title">Resident Evil</h3><p class="card-desc">Diseño del juego Resident evil Requiem.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="videojuegos" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-rerequiem.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Games</span><h3 class="card-title">Resident Evil</h3><p class="card-desc">Diseño del juego Resident Evil Requiem.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="series" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-rickymorty.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Series</span><h3 class="card-title">Rick y Morty</h3><p class="card-desc">Diseño de la serie animada Rick y Morty.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="musica" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-rollingstone.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Música</span><h3 class="card-title">Rolling Stones</h3><p class="card-desc">Diseño de la banda de rock Rolling Stones.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="videojuegos" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-ryu.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Games</span><h3 class="card-title">Street Fighter</h3><p class="card-desc">Diseño de Ryu de la saga de video juegos Street Fighter.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-sakura-semi.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Sakura</h3><p class="card-desc">Diseño de Sakura.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="peliculas" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-sauron-semi.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Peliculas</span><h3 class="card-title">Sauron</h3><p class="card-desc">Diseño de Sauron de la pelicula El Señor de los Anillos.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="videojuegos" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-scorpion1.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Games</span><h3 class="card-title">Scorpion</h3><p class="card-desc">Diseño del personaje Scorpion de Mortal Kombat.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="videojuegos" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-scorpion3.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Games</span><h3 class="card-title">Scorpion</h3><p class="card-desc">Diseño del personaje Scorpion de Mortal Kombat.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="musica" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-SCORPIONS.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Música</span><h3 class="card-title">Scorpions</h3><p class="card-desc">Diseño de la banda Scorpions.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-shiryu.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Shiryu</h3><p class="card-desc">Diseño de Shiryu de la serie de anime Caballeros del Zodiaco .</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="videojuegos" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-silenthill.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Games</span><h3 class="card-title">Piramid Head</h3><p class="card-desc">Diseño del personaje Piramid Head de la saga de video juegos Silent Hill.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="musica" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-soda.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Música</span><h3 class="card-title">Soda Stereo</h3><p class="card-desc">Diseño de la banda de rock argentina Soda Stereo.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="comics" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-spiderman.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Cómics</span><h3 class="card-title">Spider-Man</h3><p class="card-desc">Diseño de Spider-Man.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="comics" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-spidervenom1.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Cómics</span><h3 class="card-title">Spider-Man y Venom</h3><p class="card-desc">Diseño de Spider-Venom.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="peliculas" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-Star Wars.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Peliculas</span><h3 class="card-title">Dark Vader</h3><p class="card-desc">Diseño del personaje Dark Vader de la pelicula Star Wars.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="videojuegos" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-subzero.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Games</span><h3 class="card-title">Sub-Zero</h3><p class="card-desc">Diseño del personaje Sub-Zero de Mortal Kombat.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="videojuegos" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-sub-zero1.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Games</span><h3 class="card-title">Sub-Zero</h3><p class="card-desc">Diseño del personaje Sub-Zero de Mortal Kombat.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="videojuegos" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-sub-zero3.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Games</span><h3 class="card-title">Sub-Zero</h3><p class="card-desc">Diseño del personaje Sub-Zero de Mortal Kombat.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="peliculas" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-terminator.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Peliculas</span><h3 class="card-title">Terminator</h3><p class="card-desc">Diseño de la pelicula Terminator .</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="series" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-the boys21.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Series</span><h3 class="card-title">The Boys</h3><p class="card-desc">Diseño de The Boys.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="videojuegos" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-The Last of Us.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Games</span><h3 class="card-title">The Last of Us</h3><p class="card-desc">Diseño de The Last of Us.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="peliculas" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-thebatman.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Peliculas</span><h3 class="card-title">The Batman</h3><p class="card-desc">Diseño de Batman de la pelicula de The Batman.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="comics" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-thebatmanwholaughs.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Cómics</span><h3 class="card-title">El Batman que Rie</h3><p class="card-desc">Diseño del personaje de El Batman que Rie.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="series" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-theboyz.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Series</span><h3 class="card-title">The Boys</h3><p class="card-desc">Diseño animado de la serie The Boys.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="musica" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-thedoors.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Música</span><h3 class="card-title">The Doors</h3><p class="card-desc">Diseño de la banda The Doors</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-trunks1.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Trunks</h3><p class="card-desc">Diseño de Trunks.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="deportes" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-tyson-semi.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Deportes</span><h3 class="card-title">Mike Tyson</h3><p class="card-desc">Diseño del boxeador Mike Tyson.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="musica" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-u2-semi.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Música</span><h3 class="card-title">U2</h3><p class="card-desc">Diseño de la banda de rock U2.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-ultraego (2).png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Vegeta</h3><p class="card-desc">Diseño de Vegeta Ultra Ego de la serie Dragon Ball Super.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/mu-m1.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Majin Buu</h3><p class="card-desc">Diseño de figuras de Majin Buu.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/mu-m2.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Majin Buu</h3><p class="card-desc">Diseño de figuras de Majin Buu.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/mu-m3.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Majin Buu</h3><p class="card-desc">Diseño de figuras de Majin Buu.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-vegetablue2.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Vegeta</h3><p class="card-desc">Diseño de Vegeta Blue.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-vegetaremerablanca (2).png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Vegeta</h3><p class="card-desc">Diseño de Vegeta Blue.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="comics" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-venom.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Cómics</span><h3 class="card-title">Venom</h3><p class="card-desc">Diseño de Venom.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="comics" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-venom1.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Cómics</span><h3 class="card-title">Venom</h3><p class="card-desc">Diseño de figuras de Venom.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-vegetablue2.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Vegeta</h3><p class="card-desc">Diseño de Vegeta Blue.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="musica" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-viejaslocas.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Música</span><h3 class="card-title">Viejas Locas</h3><p class="card-desc">Diseño de la banda de rock argentina Viejas Locas.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-zoro.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Zoro</h3><p class="card-desc">Diseño de Zoro de la serie de anime One Piece.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-zoro3.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Zoro</h3><p class="card-desc">Diseño de Zoro de la serie de anime One Piece.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="anime" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/M-zoro-semi (2).png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Anime</span><h3 class="card-title">Zoro</h3><p class="card-desc">Diseño de Zoro de la serie de anime One Piece.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="series" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/pdi-mockup.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Series</span><h3 class="card-title">Los Simpsons</h3><p class="card-desc">Diseño de Los Peces del Infierno de Los Simpsons.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="series" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/pink-mu.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Series</span><h3 class="card-title">La Pantera Rosa</h3><p class="card-desc">Diseño de La Pantera Rosa.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="musica" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/pity-mockup.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Música</span><h3 class="card-title">Pity Alvarez</h3><p class="card-desc">Diseño de Pity Alvarez.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="otros" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/rebels-mockup.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Otros</span><h3 class="card-title">Rebels</h3><p class="card-desc">Diseño de perro de tres cabezas.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="series" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/rugrats_mu.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Series</span><h3 class="card-title">Rugrats</h3><p class="card-desc">Diseño de Rugrats.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+             <article class="card" data-category="otros" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/saamurai-mock-letras.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Otros</span><h3 class="card-title">Samurai</h3><p class="card-desc">Diseño de letras Samurai.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="otros" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/samurai-mockup.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Otros</span><h3 class="card-title">Samurai</h3><p class="card-desc">Diseño de Samurai.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="otros" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/tigre-mock-frente.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Otros</span><h3 class="card-title">Modo Beast</h3><p class="card-desc">Logo de Modo Beast.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="otros" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/tigre-mock.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Otros</span><h3 class="card-title">Tigre</h3><p class="card-desc">Diseño de Tigre Modo Beast.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+            <article class="card" data-category="deportes" data-popular="false">
+                <div class="card-img-placeholder"><img src="img/tyson-mockup.png" alt="Descripción de la remera" style="width: 100%; aspect-ratio: 4/5; object-fit: cover;"></div>
+                <div class="card-content">
+                    <span class="category-tag">Deportes</span><h3 class="card-title">Mike Tyson</h3><p class="card-desc">Diseño del boxeador Mike Tyson.</p>
+                    <div class="card-footer"><span class="price">Consultar</span><button class="btn-consultar"><i class="fab fa-whatsapp"></i> Pedir</button></div>
+                </div>
+            </article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+            <!-- Mensaje vacío -->
+            <div id="empty-msg" class="empty-message">
+                <i class="fas fa-box-open" style="font-size: 3rem; margin-bottom: 1rem; color: #555;"></i><br>
+                Próximamente agregaremos diseños en esta categoría.
+            </div>
+
+        </div>
+
+        <div class="pagination" id="pagination-controls"></div>
+    </main>
+
+    <!-- Enlace a tu número de WhatsApp -->
+    <!-- Cambia "5491100000000" por tu número internacional sin el signo + -->
+    <a href="https://wa.me/5491100000000?text=Hola,%20vengo%20del%20catálogo%20DTF%20y%20quiero%20hacer%20una%20consulta." class="whatsapp-float" target="_blank" rel="noopener noreferrer">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <footer id="footer">
+        <p><strong>DTF Studio</strong></p>
+        <p>Envíos a todo el país | Ventas por mayor y menor</p>
+        <p style="margin-top: 1rem;">&copy; 2026 Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- LOGICA DE FILTRADO Y PAGINACIÓN -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const productGrid = document.getElementById('product-grid');
+            // Guardamos todos los productos en un array constante para no perderlos al filtrar
+            const allCards = Array.from(productGrid.getElementsByClassName('card'));
+            const paginationContainer = document.getElementById('pagination-controls');
+            const titleElement = document.getElementById('current-category-title');
+            const emptyMsg = document.getElementById('empty-msg');
+            
+            const itemsPerPage = 9;
+            let currentPage = 1;
+            let currentFilteredCards = []; // Aquí guardaremos los productos que tocan mostrar
+
+            // Mapeo de nombres para el título
+            const categoryNames = {
+                'populares': 'Más Populares',
+                'todos': 'Catálogo Completo',
+                'anime': 'Anime',
+                'comics': 'Cómics',
+                'musica': 'Música',
+                'argentina': 'Selección Argentina',
+                'deportes': 'Deportes',
+                'videojuegos': 'Videojuegos',
+                'series': 'Series',
+                'peliculas': 'Películas',
+                'otros': 'Otros'
+            };
+
+            // Función principal para filtrar y preparar la vista
+            window.filterCategory = function(category) {
+                // Actualizar título
+                titleElement.innerText = categoryNames[category] || 'Catálogo';
+                
+                // Reiniciar página a 1
+                currentPage = 1;
+                
+                // Filtrar el array
+                if (category === 'populares') {
+                    currentFilteredCards = allCards.filter(card => card.getAttribute('data-popular') === 'true');
+                } else if (category === 'todos') {
+                    currentFilteredCards = allCards;
+                } else {
+                    currentFilteredCards = allCards.filter(card => card.getAttribute('data-category') === category);
+                }
+
+                // Mostrar mensaje de "vacio" si no hay productos
+                if (currentFilteredCards.length === 0) {
+                    allCards.forEach(card => card.style.display = 'none');
+                    emptyMsg.style.display = 'block';
+                    paginationContainer.innerHTML = ''; // Ocultar paginación
+                } else {
+                    emptyMsg.style.display = 'none';
+                    displayPage(currentPage);
+                    setupPagination();
+                }
+
+                // Cerrar menú móvil si está abierto
+                const navMenu = document.getElementById('nav-menu');
+                if (navMenu.classList.contains('show')) {
+                    navMenu.classList.remove('show');
+                }
+
+                // Desplazamiento suave al título del catálogo
+                document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            };
+
+            // Función para mostrar los productos de la página actual
+            function displayPage(page) {
+                const startIndex = (page - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+
+                // Primero ocultamos todos
+                allCards.forEach(card => {
+                    card.style.display = 'none';
+                    // Pequeño truco para reiniciar la animación CSS
+                    card.style.animation = 'none';
+                    card.offsetHeight; /* trigger reflow */
+                    card.style.animation = null; 
+                });
+
+                // Luego mostramos solo los del rango actual dentro del arreglo filtrado
+                currentFilteredCards.forEach((card, index) => {
+                    if (index >= startIndex && index < endIndex) {
+                        card.style.display = 'flex';
+                    }
+                });
+            }
+
+            // Función para crear botones
+            function setupPagination() {
+                paginationContainer.innerHTML = ''; 
+                const totalPages = Math.ceil(currentFilteredCards.length / itemsPerPage);
+
+                if (totalPages > 1) {
+                    for (let i = 1; i <= totalPages; i++) {
+                        const btn = document.createElement('button');
+                        btn.classList.add('page-btn');
+                        if (i === currentPage) btn.classList.add('active');
+                        btn.innerText = i;
+                        
+                        btn.addEventListener('click', () => {
+                            currentPage = i;
+                            displayPage(currentPage);
+                            updateActiveButton();
+                            document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        });
+
+                        paginationContainer.appendChild(btn);
+                    }
+                }
+            }
+
+            function updateActiveButton() {
+                const buttons = paginationContainer.getElementsByClassName('page-btn');
+                Array.from(buttons).forEach(btn => {
+                    if (parseInt(btn.innerText) === currentPage) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+            }
+
+            // Iniciar la página mostrando "Populares"
+            filterCategory('populares');
+        });
+
+        // Funciones para el menú móvil
+        function toggleMobileMenu() {
+            document.getElementById('nav-menu').classList.toggle('show');
+        }
+
+        function toggleDropdown(element) {
+            if (window.innerWidth <= 768) {
+                element.classList.toggle('active');
+            }
+        }
+    </script>
+</body>
+</html>
